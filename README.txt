@@ -5,6 +5,8 @@ EE 434 Final Project - Health Diagnostic Sensor
 This repository contains all of the scripts and custom libraries necessary to operate the sensor described in the report.
 All library requirements are listed in the main directories *requirements.txt files
 
+GITHUB REPOSITORY LINK - https://github.com/asvilesov/health_diagnostic_sensor
+
 The repository is divided into two main Folders (a tree directory is listed at the bottom for reference):
 
 Follow instructions for each:
