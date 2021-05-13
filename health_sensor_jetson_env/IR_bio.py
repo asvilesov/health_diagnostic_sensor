@@ -1,8 +1,6 @@
-# This will be the script with the bouding box on IR feed - RGB feed will not be shown.
-#
-# -> find max temperature within face bounding box (temperature around tear duct) 
-# -> assess whether there is a fever or not
-
+# This will be the script with the bounding box on IR feed - RGB feed will not be shown.
+# This script DOES NOT WORK on the Jetson - see line 301 - 303.
+# See README.txt for details on this script
 import mmcv, cv2
 import torch
 import time
@@ -284,17 +282,13 @@ if __name__ == '__main__':
                         idx = 0
                         if(RGB_stream.boxes is not None): 
                             np_frame = np.asarray(frame)
-                            print('1')
                             area, idx = calc_area(RGB_stream.boxes) # return area and idx of largest box (small filter if there are multiple people)
                             box = RGB_stream.boxes[idx]
-                            print('2')
                             # calculate center of largest box and get bounding box
                             squares = calc_square_box(box, img_dim = np_frame.shape)
-                            print('3')
                             # extract 
                             square_seg = np_frame[squares[3]:squares[1], squares[2]:squares[0]]
                             square_frame_original = cv2.resize(square_seg, (64,64), interpolation = cv2.INTER_LINEAR)
-                            print('4')
                             #Scaling for 64x64 model input
                             square_frame = np.transpose(square_frame_original, (2,0,1)) / 256
                             square_frame = np.reshape(square_frame, newshape=(1,) + square_frame.shape)
@@ -302,22 +296,18 @@ if __name__ == '__main__':
                             square_img_64 = (256*square_img - t_mean_pixel).repeat(64, 1, 1, 1)
                             square_img = square_img.to(device)
                             square_img_64 = square_img_64.to(device)
-                            print('5')
                             #Get Mask
                             masks, _ = skin_model(square_img)
-                            print('5.1')
+                            print('This next line does not work on the Jetson and crashes.')
+                            print('This is due to 6GB size of the bioFinder model.')
+                            print('We attempted to quantize the model to reduce its size, but suffered compatibility issues.')
+                      
                             output = bioFinder(square_img_64)
-                            print('5.2')
                             recons = output[0].cpu().detach().numpy()
-                            print('5.3')
                             diff   = output[2].cpu().detach().numpy()
-                            print('5.4')
                             spec   = output[3].cpu().detach().numpy()
-                            print('5.5')
                             fmel   = output[4].cpu().detach().numpy()
-                            print('5.6')
                             fhem   = output[5].cpu().detach().numpy()
-                            print('6')
                             
                             masks = masks[0].cpu().detach().numpy()
                             mask = np.transpose(masks[0], (1,2,0))
