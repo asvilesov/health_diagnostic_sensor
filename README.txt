@@ -47,7 +47,7 @@ Follow instructions for each:
         |
         |-----training_only/
         |        |
-        |        |-/biofaces_training/bioface_main.ipynb (run notebook with preloaded weights or train)
+        |        |-/biofaces_training/bioface_main.ipynb (run notebook with preloaded weights or train) The authors original code in Matlab can be found at (https://github.com/ssma502/BioFaces/blob/master/mainBioFaces.m)
         |        |-/biofaces_training/biofaces.py (main library with pyTorch code)
         |        |
         |        |-/skin_segmentation_training/test_skinseg.ipynb (run notebook with preloaded weights or train)
